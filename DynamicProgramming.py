@@ -14,16 +14,22 @@ class QValueIterationAgent:
     ''' Class to store the Q-value iteration solution, perform updates, and select the greedy action '''
 
     def __init__(self, n_states, n_actions, gamma, threshold=0.01):
-        self.n_states = n_states
+        self.n_states  = n_states
         self.n_actions = n_actions
-        self.gamma = gamma
-        self.Q_sa = np.zeros((n_states,n_actions))
+        self.gamma     = gamma
+        self.Q_sa      = np.zeros((n_states,n_actions))
         
     def select_action(self,s):
         ''' Returns the greedy best action in state s ''' 
-        # TO DO: Add own code
-        a = np.random.randint(0,self.n_actions) # Replace this with correct action selection
-        return a
+
+        "Find the Q-values for a given state and select the action that maximises Q_sa"
+
+        "Find the maximum Q(s,a) value for a given state"
+        max_Q_sa = np.max(self.Q_sa[s])
+
+        "Find the (first) action that corresponds to this maximum value"
+        return np.where(self.Q_sa[s] == max_Q_sa)[0][0]
+        
         
     def update(self,s,a,p_sas,r_sas):
         ''' Function updates Q(s,a) using p_sas and r_sas '''
