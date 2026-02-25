@@ -22,13 +22,8 @@ class QValueIterationAgent:
     def select_action(self,s):
         ''' Returns the greedy best action in state s ''' 
 
-        "Find the Q-values for a given state and select the action that maximises Q_sa"
-
-        "Find the maximum Q(s,a) value for a given state"
-        max_Q_sa = np.max(self.Q_sa[s])
-
-        "Find the (first) action that corresponds to this maximum value"
-        return np.where(self.Q_sa[s] == max_Q_sa)[0][0]
+        "Use the provided argmax function to select the action corresponding to the maximum of Q(s,a)"
+        return argmax(self.Q_sa[s])
         
         
     def update(self,s,a,p_sas,r_sas):
