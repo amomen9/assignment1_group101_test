@@ -7,6 +7,7 @@ By Thomas Moerland
 """
 
 import numpy as np
+import pandas as pa
 from Environment import StochasticWindyGridworld
 from Agent import BaseAgent
 
