@@ -77,18 +77,22 @@ def experiment():
     optimal_episode_return = 100 # set the optimal return per episode you found in the DP assignment here
     
     #### Assignment 2: Effect of exploration
-    policy = 'egreedy'
-    epsilons = [0.03,0.1,0.3]
+    policy        = 'egreedy'
+    epsilons      = [0.03,0.1,0.3]
     learning_rate = 0.1
-    backup = 'q'
-    Plot = LearningCurvePlot(title = 'Exploration: $\epsilon$-greedy versus softmax exploration')    
-    Plot.set_ylim(-100, 100) 
+    backup        = 'q'
+    Plot          = LearningCurvePlot(title = 'Exploration: $\epsilon$-greedy versus softmax exploration')    
+    Plot.set_ylim(-100, 100)
+
+    "Try out different values of epsilon"
     for epsilon in epsilons:        
         learning_curve, timesteps = average_over_repetitions(backup, n_repetitions, n_timesteps, max_episode_length, learning_rate, 
                                               gamma, policy, epsilon, temp, smoothing_window, plot, n, eval_interval)
         Plot.add_curve(timesteps,learning_curve,label=r'$\epsilon$-greedy, $\epsilon $ = {}'.format(epsilon))    
+
     policy = 'softmax'
-    temps = [0.01,0.1,1.0]
+    temps  = [0.01,0.1,1.0]
+
     for temp in temps:
         learning_curve, timesteps = average_over_repetitions(backup, n_repetitions, n_timesteps, max_episode_length, learning_rate, 
                                               gamma, policy, epsilon, temp, smoothing_window, plot, n, eval_interval)
@@ -97,12 +101,13 @@ def experiment():
     Plot.save('exploration.png')
         
     ###### Assignment 3: Q-learning versus SARSA
-    policy = 'egreedy'
-    epsilon = 0.1 # set epsilon back to original value 
+    policy         = 'egreedy'
+    epsilon        = 0.1 # set epsilon back to original value 
     learning_rates = [0.03,0.1,0.3]
-    backups = ['q','sarsa']
-    Plot = LearningCurvePlot(title = 'Back-up: on-policy versus off-policy')    
+    backups        = ['q','sarsa']
+    Plot           = LearningCurvePlot(title = 'Back-up: on-policy versus off-policy')    
     Plot.set_ylim(-100, 100) 
+
     for backup in backups:
         for learning_rate in learning_rates:
             learning_curve, timesteps = average_over_repetitions(backup, n_repetitions, n_timesteps, max_episode_length, learning_rate, 
@@ -112,12 +117,12 @@ def experiment():
     Plot.save('on_off_policy.png')
     
     # ##### Assignment 4: Back-up depth
-    policy = 'egreedy'
-    epsilon = 0.05 # set epsilon back to original value
+    policy        = 'egreedy'
+    epsilon       = 0.05 # set epsilon back to original value
     learning_rate = 0.1
-    backup = 'nstep'
-    ns = [1,3,10]
-    Plot = LearningCurvePlot(title = 'Back-up: depth')   
+    backup        = 'nstep'
+    ns            = [1,3,10]
+    Plot          = LearningCurvePlot(title = 'Back-up: depth')   
     Plot.set_ylim(-100, 100) 
     for n in ns:
         learning_curve, timesteps = average_over_repetitions(backup, n_repetitions, n_timesteps, max_episode_length, learning_rate, 
