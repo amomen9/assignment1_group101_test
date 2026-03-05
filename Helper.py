@@ -80,3 +80,5 @@ if __name__ == '__main__':
     LCTest.add_curve(x,y,label='method 1')
     LCTest.add_curve(x,smooth(y,window=35),label='method 1 smoothed')
     LCTest.save(name='learning_curve_test.png')
+    plt.show()
+    
