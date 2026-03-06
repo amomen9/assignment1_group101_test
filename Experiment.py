@@ -44,25 +44,25 @@ def average_over_repetitions(backup, n_repetitions, n_timesteps, max_episode_len
 def experiment():
     ####### Settings
     # Experiment      
-    n_repetitions = 20
+    n_repetitions    = 20
     smoothing_window = 9 # Must be an odd number. Use 'None' to switch smoothing off!
-    plot = False # Plotting is very slow, switch it off when we run repetitions
+    plot             = False # Plotting is very slow, switch it off when we run repetitions
     
     # MDP    
-    n_timesteps = 50001 # Set one extra timestep to ensure evaluation at start and end
-    eval_interval = 1000
+    n_timesteps        = 50001 # Set one extra timestep to ensure evaluation at start and end
+    eval_interval      = 1000
     max_episode_length = 100
-    gamma = 1.0
+    gamma              = 1.0
     
     # Parameters we will vary in the experiments, set them to some initial values: 
     # Exploration
-    policy = 'egreedy' # 'egreedy' or 'softmax' 
+    policy  = 'egreedy' # 'egreedy' or 'softmax' 
     epsilon = 0.05
-    temp = 1.0
+    temp    = 1.0
     # Back-up & update
-    backup = 'q' # 'q' or 'sarsa' or 'mc' or 'nstep'
+    backup        = 'q' # 'q' or 'sarsa' or 'mc' or 'nstep'
     learning_rate = 0.1
-    n = 5 # only used when backup = 'nstep'
+    n             = 5 # only used when backup = 'nstep'
         
     # Nice labels for plotting
     backup_labels = {'q': 'Q-learning',

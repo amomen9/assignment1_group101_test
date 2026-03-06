@@ -31,11 +31,15 @@ class StochasticWindyGridworld:
                 3: (-1, 0),   # left
                 }
         self.start_location        = (0,3)
+        # self.start_location        = (0,0)
         self.winds                 = (0,0,0,1,1,1,2,2,1,0)
+        # self.winds                 = (0,0,0,0)
+        # self.winds = (0,0,0)
         self.wind_blows_proportion = 0.9         
 
         self.reward_per_step = -1.0 # default reward on every step that does not reach a goal
-        self.goal_locations  = [[7,3]] # [[6,2]] a vector specifying the goal locations in [[x1,y1],[x2,y2]] format
+        # self.goal_locations  = [[7,3]] # [[6,2]] a vector specifying the goal locations in [[x1,y1],[x2,y2]] format
+        self.goal_locations  = [[7,3]]
         self.goal_rewards    = [100] # a vector specifying the associated rewards with the goals in self.goal_locations, in [r1,r2] format
         
         # Initialize model
@@ -134,22 +138,22 @@ class StochasticWindyGridworld:
         
         for s in range(self.n_states):
             for a in range(self.n_actions):
-                s_location = self._state_to_location(s)  
+                s_location       = self._state_to_location(s)  
                     
                 # if s is goal state (terminal) make it a self-loop without rewards
-                state_is_a_goal = np.any([np.all(goal_location == s_location) for goal_location in self.goal_locations])
+                state_is_a_goal  = np.any([np.all(goal_location == s_location) for goal_location in self.goal_locations])
                 if state_is_a_goal: 
                     # Make actions from this state a self-loop with 0 reward.
                     p_sas[s,a,s] = 1.0 
-                    r_sas[s,a,] = np.zeros(self.n_states)  
+                    r_sas[s,a,]  = np.zeros(self.n_states)  
                 else:
                     # check what happens if the wind blows:
-                    next_location_with_wind = np.copy(s_location) 
-                    next_location_with_wind += self.action_effects[a] # effect of action
-                    next_location_with_wind = np.clip(next_location_with_wind,(0,0),np.array(self.shape)-1) # bound within grid
+                    next_location_with_wind     = np.copy(s_location) 
+                    next_location_with_wind    += self.action_effects[a] # effect of action
+                    next_location_with_wind     = np.clip(next_location_with_wind,(0,0),np.array(self.shape)-1) # bound within grid
                     next_location_with_wind[1] += self.winds[next_location_with_wind[0]] # Apply effect of wind
-                    next_location_with_wind = np.clip(next_location_with_wind,(0,0),np.array(self.shape)-1) # bound within grid
-                    next_state_with_wind = self._location_to_state(next_location_with_wind)   
+                    next_location_with_wind     = np.clip(next_location_with_wind,(0,0),np.array(self.shape)-1) # bound within grid
+                    next_state_with_wind        = self._location_to_state(next_location_with_wind)   
                     
                     # Update p_sas and r_sas
                     p_sas[s,a,next_state_with_wind] += self.wind_blows_proportion
@@ -158,15 +162,20 @@ class StochasticWindyGridworld:
                             r_sas[s,a,next_state_with_wind]  = self.goal_rewards[i]
                     
                     # check what happens if the wind does not blow:
-                    next_location_without_wind = np.copy(s_location)
+                    next_location_without_wind  = np.copy(s_location)
                     next_location_without_wind += self.action_effects[a] # effect of action
-                    next_location_without_wind = np.clip(next_location_without_wind,(0,0),np.array(self.shape)-1) # bound within grid
-                    next_state_without_wind = self._location_to_state(next_location_without_wind)
+                    next_location_without_wind  = np.clip(next_location_without_wind,(0,0),np.array(self.shape)-1) # bound within grid
+                    next_state_without_wind     = self._location_to_state(next_location_without_wind)
     
                     # Update p_sas and r_sas
                     p_sas[s,a,next_state_without_wind] += (1-self.wind_blows_proportion)
                     for (i,goal) in enumerate(self.goal_locations):
+                        """
+                        This line below used to be
                         if np.all(next_state_without_wind == goal): # reached a goal!
+                        But this was inconsistent with the similar loop used when wind does blow
+                        """
+                        if np.all(next_location_without_wind == goal): # reached a goal!
                             r_sas[s,a,next_state_without_wind]  = self.goal_rewards[i] 
 
         self.p_sas = p_sas
@@ -174,7 +183,7 @@ class StochasticWindyGridworld:
         return 
 
     def _initialize_plot(self):
-        self.fig,self.ax = plt.subplots()#figsize=(self.width, self.height+1)) # Start a new figure
+        self.fig,self.ax = plt.subplots(figsize=(self.width + 5, self.height+1))#figsize=(self.width, self.height+1) # Start a new figure
         self.ax.set_xlim([0,self.width])
         self.ax.set_ylim([0,self.height]) 
         self.ax.axes.xaxis.set_visible(False)
