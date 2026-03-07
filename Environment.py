@@ -252,8 +252,8 @@ def full_argmax(x):
 def test():
     start_time = time.perf_counter()
     # Hyperparameters
-    n_test_steps = 1500000
-    step_pause   = 0.1
+    n_test_steps = 100
+    step_pause   = 0.4
     
     # Initialize environment and Q-array
     env  = StochasticWindyGridworld()
@@ -271,7 +271,7 @@ def test():
         s_next,r,done = env.step(a) # execute action in the environment
         p_sas,r_sas   = env.model(s,a)
         #print("State {}, Action {}, Reward {}, Next state {}, Done {}, p(s'|s,a) {}, r(s,a,s') {}".format(s,a,r,s_next,done,p_sas,r_sas))
-        #env.render(Q_sa=Q_sa,plot_optimal_policy=True,step_pause=step_pause) # display the environment
+        env.render(Q_sa=Q_sa,plot_optimal_policy=True,step_pause=step_pause) # display the environment
 
         if done: 
             s = env.reset()
