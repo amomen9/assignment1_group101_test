@@ -6,6 +6,8 @@ Leiden University, The Netherlands
 By Thomas Moerland
 """
 
+from datetime import datetime
+
 import numpy as np
 import time
 
@@ -18,6 +20,7 @@ from Helper import LearningCurvePlot, smooth
 def average_over_repetitions(backup, n_repetitions, n_timesteps, max_episode_length, learning_rate, gamma, policy='egreedy', 
                     epsilon=None, temp=None, smoothing_window=None, plot=False, n=5, eval_interval=500):
 
+    
     returns_over_repetitions = []
     now = time.time()
     
@@ -42,6 +45,11 @@ def average_over_repetitions(backup, n_repetitions, n_timesteps, max_episode_len
     return learning_curve, timesteps  
 
 def experiment(assignment = 0):
+    start_time = time.perf_counter()
+    start_human = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open("output_Q_learning.py.log", "w", encoding="utf-8") as f:
+        f.write(f"Start the process at: {start_human}\n")
+    
     ####### Settings
     # Experiment      
     n_repetitions    = 20
@@ -82,7 +90,7 @@ def experiment(assignment = 0):
         epsilons      = [0.03,0.1,0.3]
         learning_rate = 0.1
         backup        = 'q'
-        Plot          = LearningCurvePlot(title = 'Exploration: $\epsilon$-greedy versus softmax exploration')    
+        Plot          = LearningCurvePlot(title = r'Exploration: $\epsilon$-greedy versus softmax exploration')    
         Plot.set_ylim(-100, 100)
 
         "Try out different values of epsilon"
@@ -138,6 +146,12 @@ def experiment(assignment = 0):
         Plot.add_hline(optimal_episode_return, label="DP optimum")
     
     Plot.save('depth.png')
+    Plot.show()
+    
+    total_execution_time = time.perf_counter() - start_time
+    with open("output_Q_learning.py.log", "a", encoding="utf-8") as f:
+        f.writelines(f"Total execution time: {total_execution_time:.3f} seconds" + "\n")
+        
 
 if __name__ == '__main__':
     experiment(assignment=2)
