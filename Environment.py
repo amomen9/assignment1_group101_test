@@ -66,6 +66,7 @@ class StochasticWindyGridworld:
     def step(self,a):
         ''' Forward the environment based on action a, really affecting the agent location  
         Returns the next state, the obtained reward, and a boolean whether the environment terminated '''
+        
         self.agent_location += self.action_effects[a] # effect of action
         self.agent_location = np.clip(self.agent_location,(0,0),np.array(self.shape)-1) # bound within grid
         if np.random.rand() < self.wind_blows_proportion: # apply effect of wind
