@@ -49,7 +49,7 @@ def smooth(y, window, poly=2):
     return savgol_filter(y,window,poly)
 
 ### One suggested simplest policy {eps, 1-eps} is below, however, I implement the one that was mentioned in the assignment instead.
-#def e_greedy(Qa_s, eps):
+#def egreedy(Qa_s, eps):
 #    ''' Qa_s: vector of action values for state s
 #        epsilon: exploration parameter '''
 #    if np.random.rand() < eps:
@@ -57,7 +57,7 @@ def smooth(y, window, poly=2):
 #    else:
 #        return argmax(Qa_s) # Exploit learned values
 
-def e_greedy(Qa_s, eps):
+def egreedy(Qa_s, eps):
     """
     Sample one action using epsilon-greedy policy
     Qa_s: 1D array of Q-values for current state's actions
