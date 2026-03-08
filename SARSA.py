@@ -72,7 +72,7 @@ def sarsa(n_timesteps, learning_rate, gamma, policy='egreedy', epsilon=None, tem
 
 
 def test():
-    n_timesteps = 10000 # default was 1000
+    n_timesteps = 1000
     gamma = 1.0
     learning_rate = 0.1 # [0.03, 0.1, 0.3]
 
@@ -82,7 +82,7 @@ def test():
     temp = 1.0
     
     # Plotting parameters
-    plot = False
+    plot = True
     sarsa(n_timesteps, learning_rate, gamma, policy, epsilon, temp, plot)
 
     # # begin own code

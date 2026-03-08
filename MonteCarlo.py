@@ -89,8 +89,7 @@ def test():
     # Plotting parameters
     plot = True
 
-    monte_carlo(n_timesteps, max_episode_length, learning_rate, gamma, 
-                   policy, epsilon, temp, plot)
+    monte_carlo(n_timesteps, max_episode_length, learning_rate, gamma, policy, epsilon, temp, plot)
     
             
 if __name__ == '__main__':
