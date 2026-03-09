@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import savgol_filter
 # from statsmodels.nonparametric.kernel_regression import KernelReg
 
+# Begin Class LearningCurvePlot ##############################################################
 class LearningCurvePlot:
 
     def __init__(self,title=None):
@@ -39,6 +40,8 @@ class LearningCurvePlot:
         self.ax.legend()
         self.fig.tight_layout()
         self.fig.savefig(name,dpi=300)
+# End Class LearningCurvePlot ##############################################################
+
 
 def smooth(y, window, poly=2):
     '''
@@ -46,11 +49,37 @@ def smooth(y, window, poly=2):
     window: size of the smoothing window '''
     return savgol_filter(y,window,poly)
 
-def softmax(x, temp):
+### One suggested simplest policy {eps, 1-eps} is below, however, I implement the one that was mentioned in the assignment instead.
+#def egreedy(Qa_s, eps):
+#    ''' Qa_s: vector of action values for state s
+#        epsilon: exploration parameter '''
+#    if np.random.rand() < eps:
+#        return np.random.randint(0,len(Qa_s)) # Explore action space
+#    else:
+#        return argmax(Qa_s) # Exploit learned values
+
+def egreedy(Qa_s, eps):
+    """
+    Sample one action using epsilon-greedy policy
+    Qa_s: 1D array of Q-values for current state's actions
+    eps: epsilon in the closed boundary [0,1]
+    """
+    n_A = len(Qa_s)     # number of actions
+    greedy_a = argmax(Qa_s)  # tie breaking argmax()
+    # Base probability for all actions, fill probs matrix with the same values (will not sum up to 1 yet)
+    probs = np.full(n_A, eps / n_A, dtype=float)
+    # Greedy action gets the remaining probability mass (1 - eps) plus its share of the exploration probability (eps/n_A)
+    probs[greedy_a] = 1.0 - eps * (n_A - 1) / n_A
+    selected_action = np.random.choice(n_A, p=probs)
+    # Sample action from this distribution
+    return selected_action
+
+def softmax(x, temp):   # aka Boltzmann policy (Mentioned as Boltzmann in the assignment)
     ''' Computes the softmax of vector x with temperature parameter 'temp' '''
     x = x / temp # scale by temperature
-    z = x - max(x) # substract max to prevent overflow of softmax 
-    return np.exp(z)/np.sum(np.exp(z)) # compute softmax
+    z = x - max(x) # substract max to prevent overflow of softmax
+    selected_action = np.exp(z)/np.sum(np.exp(z)) # compute softmax
+    return selected_action
 
 def argmax(x):
     ''' Own variant of np.argmax with random tie breaking '''
@@ -81,3 +110,5 @@ if __name__ == '__main__':
     LCTest.add_curve(x,y,label='method 1')
     LCTest.add_curve(x,smooth(y,window=35),label='method 1 smoothed')
     LCTest.save(name='learning_curve_test.png')
+    plt.show()
+    

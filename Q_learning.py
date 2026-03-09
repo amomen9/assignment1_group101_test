@@ -62,7 +62,8 @@ def q_learning(n_timesteps, learning_rate, gamma, policy='egreedy', epsilon=None
         
         if done: # If the episode is done (terminal state), reset the environment to start a new episode
             s = env.reset() # Reset the environment to start a new episode               
-            log_lines.append(f"Goal after {t-relative_timesteps} timesteps. #Iteraion: {t+1}. Policy: {policy}\n")
+            exploration_info = f"Temp:, {temp}" if policy == "softmax" else (f"Epsilon:, {epsilon}" if policy == "egreedy" else "")
+            log_lines.append(f"Goal after {t-relative_timesteps} timesteps, #Iteraion:, {t+1}, Policy:, {policy}" + (f", {exploration_info}" if exploration_info else "") + "\n")
             #print("Goal reached (terminal state) after {} timesteps. Absolute timesteps: {}. Policy: {}".format(t-relative_timesteps, t+1, policy))
             relative_timesteps = t
 

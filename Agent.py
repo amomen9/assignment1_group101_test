@@ -7,8 +7,8 @@ By Thomas Moerland
 """
 
 import numpy as np
-from Helper import softmax, argmax
-# from Helper import egreedy
+# from Helper import softmax, argmax
+from Helper import egreedy
 import Environment
 
 
@@ -110,3 +110,4 @@ class BaseAgent:
         mean_return = np.mean(returns)
         return mean_return
 # End Class BaseAgent ##########################################################################
+
