@@ -9,6 +9,8 @@ By Thomas Moerland
 import numpy as np
 from Environment import StochasticWindyGridworld
 from Helper import argmax
+import os
+import matplotlib.pyplot as plt
 
 class QValueIterationAgent:
     ''' Class to store the Q-value iteration solution, perform updates, and select the greedy action '''
@@ -55,12 +57,6 @@ def Q_value_iteration(env, gamma=1.0, threshold=0.001, stop="end"):
 
     "Initialise the QValueIterationAgent class"
     QIagent = QValueIterationAgent(env.n_states, env.n_actions, gamma)
-    
-     # TO DO: IMPLEMENT Q-VALUE ITERATION HERE
-        
-    # Plot current Q-value estimates & print max error
-    # env.render(Q_sa=QIagent.Q_sa,plot_optimal_policy=True,step_pause=0.2)
-    # print("Q-value iteration, iteration {}, max error {}".format(i,max_error))
 
     counter = 1
     "As long as the maximum number of iterations is not reached, keep repeating"
@@ -74,7 +70,7 @@ def Q_value_iteration(env, gamma=1.0, threshold=0.001, stop="end"):
                 if counter == 1:
                     break
             case "halfway":
-                if counter == 8: # While testing it takes about 17 iterations to converge with a threshold of 0.001
+                if counter == 8: # While testing it takes about 16 iterations to converge with a threshold of 0.001 and gamma of 0.99
                     break
             case "end":
                 "Let the algorithm converge naturally"
@@ -109,13 +105,36 @@ def Q_value_iteration(env, gamma=1.0, threshold=0.001, stop="end"):
 
     return QIagent
 
-def experiment():
-    gamma     = 0.99 # Considers all future rewards equally if set to 1.0
-    threshold = 0.001
+def experiment(gamma, threshold, stop, path, goal = [[7,3]],title=""):
+    """
+    Run an experiment with the given parameters.
+
+    gamma       : float. Discount factor
+    threshold   : float. 
+    stop        : str. Either begin, halfway or end. Decides when to store the Q-table.
+                       Assumes it takes 16 iterations to finish. This is the case
+                       for gamma=0.99 amd threshold=0.001
+    path        : str. Place to store the figures
+    """
+
+    "Initialise the environment"
     env       = StochasticWindyGridworld(initialize_model=True)
-    env.render()
-    # stop      = "end"
-    stop      = None
+
+    "Set the goal location"
+    env.change_goal_location(goal)
+
+    "Run the model construction again so the goal location is handled well and the r_sas and p_sas models are updated"
+    env._construct_model()
+    env.render() 
+
+    "Set the title of the figure"
+    env.ax.set_title(title)
+
+    "Make sure the figure has a better layout"
+    plt.tight_layout()
+
+    "This parameter decides whether we want to create a plot of the environment at different stages of the VI algorithm"
+    # stop      = None #can be set to either ['begin, 'halfway','end']. Any other input will result in no stopping
     QIagent   = Q_value_iteration(env,gamma,threshold,stop=stop)
     
     "view optimal policy"
@@ -142,22 +161,30 @@ def experiment():
         rewards         = np.append(rewards,r)
 
         "Plot the process and include an arrow in the plot that indicates the greedy action in a state"
-        env.render(Q_sa=QIagent.Q_sa,plot_optimal_policy=True,step_pause=0.1)
+        env.render(Q_sa=QIagent.Q_sa,plot_optimal_policy=True,step_pause=0.5)
 
         "Save a figure"
         if step == 1:
             match stop:
                 case "begin":
-                    env.fig.savefig("step1_VI_at_begining.pdf")
+                    "Store the figure"
+                    env.fig.savefig(f"{path}")
+
+                    "Set done to true, because it will never get there taking random actions"
+                    done = True
+
                 case "halfway":
-                    env.fig.savefig("step1_VI_halfway.pdf")
+                    env.fig.savefig(f"{path}")
                 case "end":
-                    env.fig.savefig("step1_VI_at_end.pdf")
+                    env.fig.savefig(f"{path}")
         "Increase the step counter so we only store the figure once"
         step += 1           
         
         "Update the current state"
-        s               = s_next
+        s     = s_next
+    
+    "Close the figure once we're done"
+    plt.close(env.fig)
     
     "We can calculate V(s) using the rewards array"
     def value_function(s,gamma=gamma):
@@ -205,9 +232,43 @@ def experiment():
     
     print("Number of steps is",number_of_steps)
     print("Mean reward per timestep under optimal policy: {:.5g}".format(mean_reward_per_timestep))
+
+def final_experiment():
+    """
+    This function will be used to run the experiments which can be used in the report
+    or for the grader
+    """
+    
+    "Generate a folder to store plots in, if it doesn't exist already"
+    plot_dir = "DynamicProgramming_plots"
+    if not os.path.isdir(plot_dir):
+        os.makedirs(plot_dir)
+
+    """
+    Run the experiments with the different stages of 
+    the value iteration algorithm
+    """
+    print(25*"- ")
+    experiment(0.99,0.001,"begin",f"{plot_dir}/step1_VI_at_begining.pdf")
+    print(25*"- ")
+    experiment(0.99,0.001,"halfway",f"{plot_dir}/step1_VI_halfway.pdf")
+    print(25*"- ")
+    experiment(0.99,0.001,"end",f"{plot_dir}/step1_VI_at_end.pdf")
+    print(25*"- ")
+
+    "Run the experiment at a different goal location"
+    experiment(0.99,0.001,"end",f"{plot_dir}/new_goal.pdf",[[6,2]],"Goal location is now at (6,2)")
+
+    "Run the experiment at the original goal location but with a gamma of 1"
+    experiment(0.5,0.001,"end",f"{plot_dir}/gamma_0_5.pdf",title=r"Discount factor is now $\gamma = 0.5$")
+
+    "Run the experiment at the original goal location but with a higher threshold"
+    experiment(0.99,78.,"end",f"{plot_dir}/high_threshold.pdf",title=r"Threshold is now $\eta = 78.$")
+
     
 if __name__ == '__main__':
-    experiment()
-
+    # experiment(0.99,0.001,"begin","DynamicProgramming_plots")
+    # experiment(0.99,0.001,None,"DynamicProgramming_plots",[[2,3]],"Test title")
+    final_experiment()
 
 
