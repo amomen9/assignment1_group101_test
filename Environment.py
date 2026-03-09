@@ -38,8 +38,7 @@ class StochasticWindyGridworld:
         self.wind_blows_proportion = 0.9         
 
         self.reward_per_step = -1.0 # default reward on every step that does not reach a goal
-        # self.goal_locations  = [[7,3]] # [[6,2]] a vector specifying the goal locations in [[x1,y1],[x2,y2]] format
-        self.goal_locations  = [[7,3]]
+        self.goal_locations  = [[7,3]] # [[6,2]] a vector specifying the goal locations in [[x1,y1],[x2,y2]] format
         self.goal_rewards    = [100] # a vector specifying the associated rewards with the goals in self.goal_locations, in [r1,r2] format
         
         # Initialize model
@@ -60,6 +59,16 @@ class StochasticWindyGridworld:
         self.agent_location = np.array(self.start_location)
         s = self._location_to_state(self.agent_location)
         return s
+
+    def change_goal_location(self,new_goal):
+        """
+        Can be used to manually change the goal locations
+
+        new_goal    : list. Has format [[x1,y1],[x2,y2],etc.]
+        """
+        self.goal_locations = new_goal
+    
+
     
     def step(self,a):
         ''' Forward the environment based on action a, really affecting the agent location  
