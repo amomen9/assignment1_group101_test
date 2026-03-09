@@ -74,7 +74,7 @@ def experiment():
     
     #### Assignment 1: Dynamic Programming
     # Execute this assignment in DynamicProgramming.py
-    optimal_episode_return = 100 # set the optimal return per episode you found in the DP assignment here
+    optimal_episode_return = 70 # set the optimal return per episode you found in the DP assignment here
     
     #### Assignment 2: Effect of exploration
     policy        = 'egreedy'
@@ -98,7 +98,7 @@ def experiment():
                                               gamma, policy, epsilon, temp, smoothing_window, plot, n, eval_interval)
         Plot.add_curve(timesteps,learning_curve,label=r'softmax, $ \tau $ = {}'.format(temp))
     Plot.add_hline(optimal_episode_return, label="DP optimum")
-    Plot.save('exploration.png')
+    Plot.save('exploration.pdf')
         
     ###### Assignment 3: Q-learning versus SARSA
     policy         = 'egreedy'
@@ -112,9 +112,12 @@ def experiment():
         for learning_rate in learning_rates:
             learning_curve, timesteps = average_over_repetitions(backup, n_repetitions, n_timesteps, max_episode_length, learning_rate, 
                                               gamma, policy, epsilon, temp, smoothing_window, plot, n, eval_interval)
-            Plot.add_curve(timesteps,learning_curve,label=r'{}, $\alpha$ = {} '.format(backup_labels[backup],learning_rate))
+            if backup == "q":
+                Plot.add_curve(timesteps,learning_curve,label=r'{}, $\alpha$ = {} '.format(backup_labels[backup],learning_rate))
+            elif backup == "sarsa":
+                Plot.add_curve(timesteps,learning_curve,label=r'{}, $\alpha$ = {} '.format(backup_labels[backup],learning_rate), ls="dashed")
     Plot.add_hline(optimal_episode_return, label="DP optimum")
-    Plot.save('on_off_policy.png')
+    Plot.save('on_off_policy.pdf')
     
     # ##### Assignment 4: Back-up depth
     policy        = 'egreedy'
@@ -133,7 +136,7 @@ def experiment():
                                           gamma, policy, epsilon, temp, smoothing_window, plot, n, eval_interval)
     Plot.add_curve(timesteps,learning_curve,label='Monte Carlo')        
     Plot.add_hline(optimal_episode_return, label="DP optimum")
-    Plot.save('depth.png')
+    Plot.save('depth.pdf')
 
 if __name__ == '__main__':
     experiment()
