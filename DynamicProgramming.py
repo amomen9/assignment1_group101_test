@@ -70,7 +70,7 @@ def Q_value_iteration(env, gamma=1.0, threshold=0.001, stop="end"):
                 if counter == 1:
                     break
             case "halfway":
-                if counter == 8: # While testing it takes about 16 iterations to converge with a threshold of 0.001 and gamma of 0.99
+                if counter == 6: # While testing it takes about 12 iterations to converge with a threshold of 70. and gamma of 0.99
                     break
             case "end":
                 "Let the algorithm converge naturally"
@@ -231,6 +231,7 @@ def experiment(gamma, threshold, stop, path, goal = [[7,3]],title=""):
     mean_reward_per_timestep = value_function(3,gamma=1) / number_of_steps
     
     print("Number of steps is",number_of_steps)
+    print(f"V({env._location_to_state((0,3))}) =",value_function(env._location_to_state((0,3)),gamma))
     print("Mean reward per timestep under optimal policy: {:.5g}".format(mean_reward_per_timestep))
 
 def final_experiment():
@@ -248,25 +249,26 @@ def final_experiment():
     Run the experiments with the different stages of 
     the value iteration algorithm
     """
-    print(25*"- ")
-    experiment(0.99,0.001,"begin",f"{plot_dir}/step1_VI_at_begining.pdf")
-    print(25*"- ")
-    experiment(0.99,0.001,"halfway",f"{plot_dir}/step1_VI_halfway.pdf")
-    print(25*"- ")
-    experiment(0.99,0.001,"end",f"{plot_dir}/step1_VI_at_end.pdf")
-    print(25*"- ")
+    # print(25*"- ")
+    # experiment(0.99,70.,"begin",f"{plot_dir}/step1_VI_at_begining.pdf")
+    # print(25*"- ")
+    # experiment(0.99,70.,"halfway",f"{plot_dir}/step1_VI_halfway.pdf")
+    # print(25*"- ")
+    # experiment(0.99,70.,"end",f"{plot_dir}/step1_VI_at_end.pdf")
+    # print(25*"- ")
 
     "Run the experiment at a different goal location"
-    experiment(0.99,0.001,"end",f"{plot_dir}/new_goal.pdf",[[6,2]],"Goal location is now at (6,2)")
+    experiment(0.99,1.,"end",f"{plot_dir}/new_goal.pdf",[[6,2]],"Goal location is now at (6,2)")
 
     "Run the experiment at the original goal location but with a gamma of 1"
-    experiment(0.5,0.001,"end",f"{plot_dir}/gamma_0_5.pdf",title=r"Discount factor is now $\gamma = 0.5$")
+    experiment(0.5,70.,"end",f"{plot_dir}/gamma_0_5.pdf",title=r"Discount factor is now $\gamma = 0.5$")
 
     "Run the experiment at the original goal location but with a higher threshold"
     experiment(0.99,78.,"end",f"{plot_dir}/high_threshold.pdf",title=r"Threshold is now $\eta = 78.$")
 
     
 if __name__ == '__main__':
+    # experiment(0.99,70.,None,"")
     # experiment(0.99,0.001,"begin","DynamicProgramming_plots")
     # experiment(0.99,0.001,None,"DynamicProgramming_plots",[[2,3]],"Test title")
     final_experiment()

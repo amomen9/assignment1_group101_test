@@ -23,4 +23,7 @@ threshold     = 78.
 
 These experiments are all run consecutively using
 python DynamicProgramming.py
+
 The plots will also be added to the DynamicProgramming_plots directory that will be generated
+
+The optimal_episode_return is determined using gamma = 0.99 and threshold = 0.001
