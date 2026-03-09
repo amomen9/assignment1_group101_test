@@ -22,4 +22,5 @@ gamma         = 0.99
 threshold     = 78.
 
 These experiments are all run consecutively using
-{insert command that runs DynamicProgramming.py from command line}
+python DynamicProgramming.py
+The plots will also be added to the DynamicProgramming_plots directory that will be generated
