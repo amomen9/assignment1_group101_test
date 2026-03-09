@@ -20,13 +20,13 @@ class LearningCurvePlot:
         if title is not None:
             self.ax.set_title(title)
         
-    def add_curve(self,x,y,label=None):
+    def add_curve(self,x,y,label=None, ls="solid"):
         ''' y: vector of average reward results
         label: string to appear as label in plot legend '''
         if label is not None:
-            self.ax.plot(x,y,label=label)
+            self.ax.plot(x,y,label=label, ls=ls)
         else:
-            self.ax.plot(x,y)
+            self.ax.plot(x,y, ls=ls)
     
     def set_ylim(self,lower,upper):
         self.ax.set_ylim([lower,upper])
@@ -37,6 +37,7 @@ class LearningCurvePlot:
     def save(self,name='test.png'):
         ''' name: string for filename of saved figure '''
         self.ax.legend()
+        self.fig.tight_layout()
         self.fig.savefig(name,dpi=300)
 
 def smooth(y, window, poly=2):

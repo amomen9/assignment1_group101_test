@@ -9,10 +9,10 @@ By Thomas Moerland
 import numpy as np
 import time
 
-from Q_learning_solution import q_learning
-from SARSA_solution import sarsa
-from Nstep_solution import n_step_Q
-from MonteCarlo_solution import monte_carlo
+from Q_learning import q_learning
+from SARSA import sarsa
+from Nstep import n_step_Q
+from MonteCarlo import monte_carlo
 from Helper import LearningCurvePlot, smooth
 
 def average_over_repetitions(backup, n_repetitions, n_timesteps, max_episode_length, learning_rate, gamma, policy='egreedy', 
@@ -36,7 +36,7 @@ def average_over_repetitions(backup, n_repetitions, n_timesteps, max_episode_len
         returns_over_repetitions.append(returns)
         
     print('Running one setting takes {} minutes'.format((time.time()-now)/60))
-    learning_curve = np.mean(np.array(returns_over_repetitions),axis=0) # average over repetitions  
+    learning_curve = np.mean(np.array(returns_over_repetitions), axis=0) # average over repetitions  
     if smoothing_window is not None: 
         learning_curve = smooth(learning_curve,smoothing_window) # additional smoothing
     return learning_curve, timesteps  
@@ -74,7 +74,7 @@ def experiment():
     
     #### Assignment 1: Dynamic Programming
     # Execute this assignment in DynamicProgramming.py
-    optimal_episode_return = 70.29155421897512 # set the optimal return per episode you found in the DP assignment here
+    optimal_episode_return = 70 # set the optimal return per episode you found in the DP assignment here
     
     #### Assignment 2: Effect of exploration
     policy        = 'egreedy'
@@ -98,7 +98,7 @@ def experiment():
                                               gamma, policy, epsilon, temp, smoothing_window, plot, n, eval_interval)
         Plot.add_curve(timesteps,learning_curve,label=r'softmax, $ \tau $ = {}'.format(temp))
     Plot.add_hline(optimal_episode_return, label="DP optimum")
-    Plot.save('exploration.png')
+    Plot.save('exploration.pdf')
         
     ###### Assignment 3: Q-learning versus SARSA
     policy         = 'egreedy'
@@ -112,9 +112,12 @@ def experiment():
         for learning_rate in learning_rates:
             learning_curve, timesteps = average_over_repetitions(backup, n_repetitions, n_timesteps, max_episode_length, learning_rate, 
                                               gamma, policy, epsilon, temp, smoothing_window, plot, n, eval_interval)
-            Plot.add_curve(timesteps,learning_curve,label=r'{}, $\alpha$ = {} '.format(backup_labels[backup],learning_rate))
+            if backup == "q":
+                Plot.add_curve(timesteps,learning_curve,label=r'{}, $\alpha$ = {} '.format(backup_labels[backup],learning_rate))
+            elif backup == "sarsa":
+                Plot.add_curve(timesteps,learning_curve,label=r'{}, $\alpha$ = {} '.format(backup_labels[backup],learning_rate), ls="dashed")
     Plot.add_hline(optimal_episode_return, label="DP optimum")
-    Plot.save('on_off_policy.png')
+    Plot.save('on_off_policy.pdf')
     
     # ##### Assignment 4: Back-up depth
     policy        = 'egreedy'
@@ -133,7 +136,7 @@ def experiment():
                                           gamma, policy, epsilon, temp, smoothing_window, plot, n, eval_interval)
     Plot.add_curve(timesteps,learning_curve,label='Monte Carlo')        
     Plot.add_hline(optimal_episode_return, label="DP optimum")
-    Plot.save('depth.png')
+    Plot.save('depth.pdf')
 
 if __name__ == '__main__':
     experiment()
