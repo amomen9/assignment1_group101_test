@@ -93,5 +93,20 @@ def test():
     eval_returns, eval_timesteps = q_learning(n_timesteps=n_timesteps, learning_rate=learning_rate, gamma=gamma, policy=policy, epsilon=epsilon, temp=temp, plot=plot, eval_interval=eval_interval)
     print(eval_returns,eval_timesteps)
 
+def run_egreedy(epsilon):
+    "Running an experiment for Q-learning using epsilon greedy policy"
+    eval_returns, eval_timesteps = q_learning(n_timesteps = 50001, learning_rate = 0.1,
+                                              gamma = 1.0, policy = 'egreedy',
+                                              plot = True, eval_interval = 1000,
+                                              epsilon = epsilon)
+    
+
+def run_softmax(temp):
+    "Running an experiment for Q-learning using the Boltzmann policy"
+    eval_returns2, eval_timesteps2 = q_learning(n_timesteps = 50001, learning_rate = 0.1,
+                                                gamma = 1.0, policy = "softmax",
+                                                plot = True, eval_interval = 1000,
+                                                temp = temp)
+
 if __name__ == '__main__':
     test()
