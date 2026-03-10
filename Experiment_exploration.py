@@ -64,8 +64,8 @@ def experiment(assignment = 0):
     plot             = False # Plotting is very slow, switch it off when we run repetitions
     
     # MDP    
+    #n_timesteps        = 50001 #50001 # Set one extra timestep to ensure evaluation at start and end
     n_timesteps        = 50001 #50001 # Set one extra timestep to ensure evaluation at start and end
-    #n_timesteps        = 15001 #50001 # Set one extra timestep to ensure evaluation at start and end
     eval_interval      = 1000 #1000
     max_episode_length = 100 #100
     gamma              = 1.0
