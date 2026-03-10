@@ -21,21 +21,21 @@ import Environment
 #    else:
 #        return argmax(Qa_s) # Exploit learned values
 
-def egreedy(Qa_s, eps):
-    """
-    Sample one action using epsilon-greedy policy
-    Qa_s: 1D array of Q-values for current state's actions
-    eps: epsilon in the closed boundary [0,1]
-    """
-    n_A = len(Qa_s)     # number of actions
-    greedy_a = argmax(Qa_s)  # tie breaking argmax()
-    # Base probability for all actions, fill probs matrix with the same values (will not sum up to 1 yet)
-    probs = np.full(n_A, eps / n_A, dtype=float)
-    # Greedy action gets the remaining probability mass (1 - eps) plus its share of the exploration probability (eps/n_A)
-    probs[greedy_a] = 1.0 - eps * (n_A - 1) / n_A
-    selected_action = np.random.choice(n_A, p=probs)
-    # Sample action from this distribution
-    return int(selected_action)
+# def egreedy(Qa_s, eps):
+#     """
+#     Sample one action using epsilon-greedy policy
+#     Qa_s: 1D array of Q-values for current state's actions
+#     eps: epsilon in the closed boundary [0,1]
+#     """
+#     n_A = len(Qa_s)     # number of actions
+#     greedy_a = argmax(Qa_s)  # tie breaking argmax()
+#     # Base probability for all actions, fill probs matrix with the same values (will not sum up to 1 yet)
+#     probs = np.full(n_A, eps / n_A, dtype=float)
+#     # Greedy action gets the remaining probability mass (1 - eps) plus its share of the exploration probability (eps/n_A)
+#     probs[greedy_a] = 1.0 - eps * (n_A - 1) / n_A
+#     selected_action = np.random.choice(n_A, p=probs)
+#     # Sample action from this distribution
+#     return int(selected_action)
 
 def softmax(x, temp):   # aka Boltzmann policy (Mentioned as Boltzmann in the assignment)
     ''' Computes the softmax of vector x with temperature parameter 'temp' '''
