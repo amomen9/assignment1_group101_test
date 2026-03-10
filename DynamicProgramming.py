@@ -249,13 +249,13 @@ def final_experiment():
     Run the experiments with the different stages of 
     the value iteration algorithm
     """
-    # print(25*"- ")
-    # experiment(0.99,70.,"begin",f"{plot_dir}/step1_VI_at_begining.pdf")
-    # print(25*"- ")
-    # experiment(0.99,70.,"halfway",f"{plot_dir}/step1_VI_halfway.pdf")
-    # print(25*"- ")
-    # experiment(0.99,70.,"end",f"{plot_dir}/step1_VI_at_end.pdf")
-    # print(25*"- ")
+    print(25*"- ")
+    experiment(0.99,70.,"begin",f"{plot_dir}/step1_VI_at_begining.pdf")
+    print(25*"- ")
+    experiment(0.99,70.,"halfway",f"{plot_dir}/step1_VI_halfway.pdf")
+    print(25*"- ")
+    experiment(0.99,70.,"end",f"{plot_dir}/step1_VI_at_end.pdf")
+    print(25*"- ")
 
     "Run the experiment at a different goal location"
     experiment(0.99,1.,"end",f"{plot_dir}/new_goal.pdf",[[6,2]],"Goal location is now at (6,2)")
